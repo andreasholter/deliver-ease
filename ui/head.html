@@ -1,0 +1,9 @@
+<!-- HTML Injected into <head> for analytics, scripts, etc -->
+<meta name="referrer" content="no-referrer-when-downgrade">
+<script>
+  // Allow iframe embedding from any domain
+  if (window.top !== window.self) {
+    // We're in an iframe - this is expected
+    console.log('DeliverEase widget loaded in iframe');
+  }
+</script>
