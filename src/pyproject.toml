@@ -1,0 +1,238 @@
+#
+# Configuration of development tools for the user workspace in Databutton.
+#
+
+[tool.pyright]
+# See https://microsoft.github.io/pyright/#/configuration?id=sample-pyprojecttoml-file
+# venvPath [path, optional]: Path to a directory containing one or more subdirectories, each of which contains a virtual environment. When used in conjunction with a venv setting (see below), pyright will search for imports in the virtual environment’s site-packages directory rather than the paths specified by the default Python interpreter. If you are working on a project with other developers, it is best not to specify this setting in the config file, since this path will typically differ for each developer. Instead, it can be specified on the command line or in a per-user setting.
+venvPath = "/user-venvs"
+
+# venv [string, optional]: Used in conjunction with the venvPath, specifies the virtual environment to use.
+
+# verboseOutput [boolean]: Specifies whether output logs should be verbose. This is useful when diagnosing certain problems like import resolution issues.
+verboseOutput = true
+
+# extraPaths [array of strings, optional]: Additional search paths that will be used when searching for modules imported by files.
+extraPaths = ["/app/src", "/app/src/backends"]
+
+# pythonVersion [string, optional]: Specifies the version of Python that will be used to execute the source code. The version should be specified as a string in the format "M.m" where M is the major version and m is the minor (e.g. "3.0" or "3.6"). If a version is provided, pyright will generate errors if the source code makes use of language features that are not supported in that version. It will also tailor its use of type stub files, which conditionalizes type definitions based on the version. If no version is specified, pyright will use the version of the current python interpreter, if one is present.
+pythonVersion = "3.11"
+
+# pythonPlatform [string, optional]: Specifies the target platform that will be used to execute the source code. Should be one of "Windows", "Darwin", "Linux", or "All". If specified, pyright will tailor its use of type stub files, which conditionalize type definitions based on the platform. If no platform is specified, pyright will use the current platform.
+pythonPlatform = "Linux"
+
+# typeCheckingMode ["off", "basic", "strict"]: Specifies the default rule set to use. Some rules can be overridden using additional configuration flags documented below. The default value for this setting is "basic". If set to "off", all type-checking rules are disabled, but Python syntax and semantic errors are still reported.
+#   (we probably want basic, just using strict at first to get more activity for testing LSP connection)
+typeCheckingMode = "strict"
+
+# useLibraryCodeForTypes [boolean]: Determines whether pyright reads, parses and analyzes library code to extract type information in the absence of type stub files. Type information will typically be incomplete. We recommend using type stubs where possible. The default value for this option is true.
+useLibraryCodeForTypes = true
+
+# https://microsoft.github.io/pyright/#/configuration?id=type-check-diagnostics-settings
+reportMissingImports = true
+reportMissingTypeStubs = false
+
+[tool.pylsp]
+# This is a bit weird, it needs to be either flake8 or pycodestyle,
+# even though we're disabling both
+configurationSources = ["flake8"]
+
+[tool.pylsp.plugins.autopep8]
+enabled = false
+
+[tool.pylsp.plugins.flake8]
+enabled = false
+# config	string	Path to the config file that will be the authoritative config source.	null
+# exclude	array of string items	List of files or directories to exclude.	[]
+# executable	string	Path to the flake8 executable.	"flake8"
+# filename	string	Only check for filenames matching the patterns in this list.	null
+# hangClosing	boolean	Hang closing bracket instead of matching indentation of opening bracket's line.	null
+# ignore	array of string items	List of errors and warnings to ignore (or skip).	[]
+# maxComplexity	integer	Maximum allowed complexity threshold.	null
+# maxLineLength	integer	Maximum allowed line length for the entirety of this run.	null
+# indentSize	integer	Set indentation spaces.	null
+# perFileIgnores	array of string items	A pairing of filenames and violation codes that defines which violations to ignore in a particular file, for example: ["file_path.py:W305,W304"]).	[]
+# select	array of unique string items	List of errors and warnings to enable.	null
+
+[tool.pylsp.plugins.jedi]
+# auto_import_modules	array of string items	List of module names for jedi.settings.auto_import_modules.	["numpy"]
+auto_import_modules = ["numpy", "databutton"]
+# extra_paths	array of string items	Define extra paths for jedi.Script.	[]
+# env_vars	object	Define environment variables for jedi.Script and Jedi.names.	null
+# environment	string	Define environment for jedi.Script and Jedi.names.	null
+
+[tool.pylsp.plugins.jedi_completion]
+enabled = true
+# include_params	boolean	Auto-completes methods and classes with tabstops for each parameter.	True
+include_params = true
+# include_class_objects	boolean	Adds class objects as a separate completion item.	false
+include_class_objects = false
+# include_function_objects	boolean	Adds function objects as a separate completion item.	false
+include_function_objects = false
+# fuzzy	boolean	Enable fuzzy when requesting autocomplete.	false
+fuzzy = false
+# eager	boolean	Resolve documentation and detail eagerly.	false
+eager = false
+# resolve_at_most	integer	How many labels and snippets (at most) should be resolved?	25
+resolve_at_most = 25
+# cache_for	array of string items	Modules for which labels and snippets should be cached.	["pandas", "numpy", "tensorflow", "matplotlib"]
+cache_for = ["pandas", "numpy", "tensorflow", "matplotlib"]
+
+[tool.pylsp.plugins.jedi_definition]
+enabled = true
+# follow_imports	boolean	The goto call will follow imports.	true
+# (TODO: It would be really neat to follow imports but needs frontend development)
+follow_imports = false
+# follow_builtin_imports	boolean	If follow_imports is True will decide if it follow builtin imports.	true
+follow_builtin_imports = false
+# follow_builtin_definitions	boolean	Follow builtin and extension definitions to stubs.	true
+follow_builtin_definitions = false
+
+[tool.pylsp.plugins.jedi_hover]
+enabled = true
+
+[tool.pylsp.plugins.jedi_references]
+enabled = true
+
+[tool.pylsp.plugins.jedi_signature_help]
+enabled = true
+
+[tool.pylsp.plugins.jedi_symbols]
+enabled = true
+# all_scopes	boolean	If True lists the names of all scopes instead of only the module namespace.	true
+all_scopes = true
+# include_import_symbols	boolean	If True includes symbols imported from other libraries.	true
+include_import_symbols = true
+
+[tool.pylsp.plugins.mccabe]
+enabled = false
+# threshold	integer	The minimum threshold that triggers warnings about cyclomatic complexity.	15
+
+[tool.pylsp.plugins.preload]
+enabled = true
+# modules	array of unique string items	List of modules to import on startup	[]
+modules = ["numpy", "pandas", "databutton"]
+
+[tool.pylsp.plugins.pycodestyle]
+enabled = false
+# exclude	array of unique string items	Exclude files or directories which match these patterns.	[]
+# filename	array of unique string items	When parsing directories, only check filenames matching these patterns.	[]
+# select	array of unique string items	Select errors and warnings	null
+# ignore	array of unique string items	Ignore errors and warnings	[]
+# hangClosing	boolean	Hang closing bracket instead of matching indentation of opening bracket's line.	null
+# maxLineLength	integer	Set maximum allowed line length.	null
+# indentSize	integer	Set indentation spaces.	null
+
+[tool.pylsp.plugins.pydocstyle]
+enabled = false
+# convention	string (one of: 'pep257', 'numpy', 'google', None)	Choose the basic list of checked errors by specifying an existing convention.	null
+# addIgnore	array of unique string items	Ignore errors and warnings in addition to the specified convention.	[]
+# addSelect	array of unique string items	Select errors and warnings in addition to the specified convention.	[]
+# ignore	array of unique string items	Ignore errors and warnings	[]
+# select	array of unique string items	Select errors and warnings	null
+# match	string	Check only files that exactly match the given regular expression; default is to match files that don't start with 'test_' but end with '.py'.	"(?!test_).*\\.py"
+# matchDir	string	Search only dirs that exactly match the given regular expression; default is to match dirs which do not begin with a dot.	"[^\\.].*"
+
+[tool.pylsp.plugins.pyflakes]
+enabled = false
+
+[tool.pylsp.plugins.pylint]
+enabled = false
+# args	array of non-unique string items	Arguments to pass to pylint.	[]
+# executable	string	Executable to run pylint with. Enabling this will run pylint on unsaved files via stdin. Can slow down workflow. Only works with python3.	null
+
+[tool.pylsp.plugins.rope_autoimport]
+enabled = false
+# memory	boolean	Make the autoimport database memory only. Drastically increases startup time.	false
+memory = true
+
+[tool.pylsp.plugins.rope_completion]
+enabled = false
+# eager	boolean	Resolve documentation and detail eagerly.	false
+eager = false
+
+[tool.pylsp.plugins.yapf]
+enabled = false
+
+[tool.pylsp.rope]
+# extensionModules	string	Builtin and c-extension modules that are allowed to be imported and inspected by rope.	null
+# ropeFolder	array of unique string items	The name of the folder in which rope stores project configurations and data. Pass null for not using such a folder at all.	null
+
+# .................
+
+[tool.pylsp-mypy]
+enabled = false
+live_mode = false
+dmypy = true
+strict = false
+report_progress = false
+
+[tool.mypy]
+ignore_missing_imports = true
+disable_error_code = []
+
+[tool.pylsp.plugins.rope]
+enabled = false
+
+[tool.pylsp-rope]
+enabled = false
+
+# [tool.rope]
+
+[tool.pylsp.plugins.black]
+enabled = true
+line_length = 88
+preview = false
+cache_config = false
+
+# [tool.black]
+# line-length = 88
+# target-version = ['py310']
+
+[tool.pylsp.plugins.pyls_isort]
+enabled = false
+
+# [tool.isort]
+# profile = "black"
+
+[tool.pylsp.plugins.ruff]
+enabled = true
+
+[tool.ruff]
+# See https://beta.ruff.rs/docs/configuration/#using-pyprojecttoml
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+# E: Enable the pycodestyle rules
+# F: Enable pyflakes rules
+# B: Enable flake8-bugbear rules
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+select = ["E", "F", "B"]
+# Defaults:
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or McCabe complexity (`C901`) by default.
+# select = ["E4", "E7", "E9", "F"]
+
+ignore = [
+  "E501", # Line too long
+  "F401", # Imported but unused
+  "B007", # Loop control variable {name} not used within loop body
+  "E402", # Module level import not at top of file
+  "B905", # zip() without an explicit strict= parameter
+  "B018", # Found useless expression. Either assign it to a variable or remove it.
+  "E712", # Comparison to True should be 'if cond is True:' or 'if cond:'
+  "E731", # Do not assign a lambda expression, use a def
+  "E741", # Ambiguous variable name: {name}
+  "C901", # {name} is too complex ({complexity} > {max_complexity})
+  "W291", # Trailing whitespace
+  "W292", # No newline at end of file
+  "W293", # Blank line contains whitespace
+]
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.format]
