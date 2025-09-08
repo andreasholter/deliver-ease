@@ -1,0 +1,13 @@
+# Node
+ui/node_modules/
+ui/dist/
+ui/.vite/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# Databutton local artifacts (if any)
+.dbt/
